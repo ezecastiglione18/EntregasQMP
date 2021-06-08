@@ -1,0 +1,81 @@
+Requisito 1:
+class SugerenciaDiaria{
+  List<Atuendo> atuendos
+}
+
+class Usuario {
+  //(...)
+  SugerenciaDiaria sugerenciaDiaria;
+
+  SugerenciaDiaria getSugerenciaDiaria(){...} ==> Elije una surgerencia ya creada o te genera otra
+}
+
+class Asesor_Atuendo {
+  
+  method generarSurgerenciaDiaria(Repo placard){
+	//.... ==> Te lo agrega a la lista de atuendos de SurgerenciaDiaria
+   }
+}
+
+
+
+Requisito 2:
+Lo unico que se me ocurre es hacer con Singleton un RepoUsuarios que contenga una lista de usuarios
+y hacer un generarSurgerenciaDiariaParaTodos() que implemente algo parecido a forEach
+
+
+Requisito 3:
+
+
+
+Requisito 4:
+#Servicio_Meteorologico
+public void actualizarAlertas() {
+		 this.alertasActuales = new ServicioMeteorologicoAccuWeather().getAlertasMeteorologicas();
+	 }
+
+#Servicio_Meteorologico_Accu_Weather
+List<AlertaMeteorologica> adaptarListaDeAlertas(List<String> alertas) {
+    //convierto una lista de strings a una lista de los enums de mi dominio
+  }
+
+  List<AlertaMeteorologica> getAlertasMeteorologicas() {
+      AccuWeatherAPI apiClima = new AccuWeatherAPI();
+      Map<String, Object> alertas = apiClima.getAlertas("Buenos Aires");
+      return adaptarListaDeAlertas(alertas.get("CurrentAlerts"));
+    }
+
+
+Ultimos requisitos (se agrega pseudocodigo de una):
+#RegistroAlertas
+public void actualizarAlertas() {
+	this.alertasActuales = new ServicioMeteorologicoAccuWeather().getAlertasMeteorologicas();
+     	this.realizarAccionesSobreAlertas(this.alertasActuales)
+}
+
+public void realizarAccionesSobreAlertas(List<AlertaMeteorologica> alertas){
+     repoUsuarios.getUsuarios().forEach(usuario -> usuario.realizarAccionesSobreAlertas(alertas))
+}
+
+
+#Usuario
+public void realizarAccionesSobreAlertas(List<AlertaMeteorologica> alertas){
+    accionesConfigurables.forEach(accion -> accion.notficarActualizacionDeAlertas(this, alertas));
+}
+
+#Notificador ante alertas
+void nuevasAlertasMeteorologicas(usuario, alertas) {
+    if(alertas.contains(AlertaMeteorologica.TORMENTA)){
+      new Notificador().notificar("Sali con paraguas!");
+    }
+    else if(alertas.contains(AlertaMeteorologica.GRANIZO)) {
+      new Notificador().notificar("No salgas en auto!");
+    }
+    //y asi sucesivamente para cada alerta
+}
+
+Lo que pasa es que lo hice asi porque no se como modificar los enums como para que haya un mensaje getMensaje() asi hacemos polimorfismo
+
+
+
+
